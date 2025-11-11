@@ -7,7 +7,9 @@
     "build": "nest build",
     "start": "node --enable-source-maps dist/main.js",
     "start:dev": "nest start --watch",
-    "start:prod": "node --enable-source-maps dist/main.js"
+    "start:prod": "node --enable-source-maps dist/main.js",
+    "prisma:generate": "prisma generate --schema ../../prisma/schema.prisma"
+
   },
   "dependencies": {
     "@nestjs/common": "10.3.2",
