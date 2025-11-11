@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["apps/**/*", "prisma/**/*", "src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
