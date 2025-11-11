@@ -1,7 +1,7 @@
 {
   "name": "@hub/api",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "nest start --watch",
     "start:dev": "nest start --watch",
