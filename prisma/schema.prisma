@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../apps/api/node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Tenant {
+  id          String       @id @default(uuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+  schools     School[]
+  classrooms  Classroom[]
+  students    Student[]
+  resources   Resource[]
+  subscriptions Subscription[]
+  auditLogs   AuditLog[]
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+}
+
+model Membership {
+  id        String  @id @default(uuid())
+  role      String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
+
+model School {
+  id        String  @id @default(uuid())
+  name      String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  classrooms Classroom[]
+}
+
+model Classroom {
+  id        String  @id @default(uuid())
+  name      String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  school    School? @relation(fields: [schoolId], references: [id])
+  schoolId  String?
+  enrollments Enrollment[]
+  assignments Assignment[]
+  events     Event[]
+}
+
+model Student {
+  id        String  @id @default(uuid())
+  first     String
+  last      String
+  className String
+  gender    String?
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  flagsIep  Boolean @default(false)
+  flagsEal  Boolean @default(false)
+  flagsAtRisk Boolean @default(false)
+  flagsMed  Boolean @default(false)
+  accom     String?
+
+  guardians StudentGuardian[]
+  enrollments Enrollment[]
+  grades     Grade[]
+  behaviors  Behavior[]
+}
+
+model Guardian {
+  id        String  @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  students  StudentGuardian[]
+}
+
+model StudentGuardian {
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+  guardian  Guardian @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  guardianId String
+
+  @@id([studentId, guardianId])
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  classroomId String
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId   String
+}
+
+model Assignment {
+  id          String    @id @default(uuid())
+  name        String
+  term        String
+  subject     String
+  max         Int
+  category    String?
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  classroomId String
+  createdAt   DateTime  @default(now())
+  grades      Grade[]
+}
+
+model Grade {
+  id           String   @id @default(uuid())
+  points       Int
+  missing      Boolean  @default(false)
+  ungraded     Boolean  @default(false)
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String
+  student      Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId    String
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  date        DateTime
+  time        String?
+  title       String
+  className   String?
+  notes       String?
+  link        String?
+  classroom   Classroom? @relation(fields: [classroomId], references: [id])
+  classroomId String?
+}
+
+model Resource {
+  id        String  @id @default(uuid())
+  title     String
+  url       String?
+  subject   String?
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+}
+
+model Behavior {
+  id        String  @id @default(uuid())
+  date      DateTime
+  type      String
+  description String?
+  points    Int     @default(0)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String
+}
+
+model EmailTemplate {
+  id        String  @id @default(uuid())
+  title     String
+  body      String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+}
+
+model Message {
+  id        String  @id @default(uuid())
+  subject   String
+  body      String
+  to        String
+  date      DateTime @default(now())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+}
+
+model ReportSnapshot {
+  id        String  @id @default(uuid())
+  studentId String
+  json      Json
+  createdAt DateTime @default(now())
+}
+
+model CommentBankItem {
+  id        String  @id @default(uuid())
+  category  String
+  level     String?
+  tags      String?
+  text      String
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+}
+
+model Subscription {
+  id        String  @id @default(uuid())
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  plan      String
+  status    String @default("trialing")
+}
+
+model AuditLog {
+  id        String  @id @default(uuid())
+  tenant    Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId  String
+  actorId   String?
+  action    String
+  target    String?
+  ip        String?
+  createdAt DateTime @default(now())
+}
+
+model StudentPII {
+  id        String  @id @default(uuid())
+  studentId String  @unique
+  emailC    String?
+  phoneC    String?
+  addressC  String?
+}
+
+model GuardianPII {
+  id         String  @id @default(uuid())
+  guardianId String  @unique
+  emailC     String?
+  phoneC     String?
+  addressC   String?
+}

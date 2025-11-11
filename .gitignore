@@ -1,0 +1,16 @@
+node_modules
+.next
+dist
+out
+coverage
+.DS_Store
+.env
+.env.*
+.vercel
+.render
+.prisma
+pnpm-lock.yaml
+yarn.lock
+*.log
+*.local
+*.sqlite

@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "lib": [
+      "ES2021",
+      "DOM"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hub/ui/*": [
+        "packages/ui/src/*"
+      ],
+      "@hub/ui": [
+        "packages/ui/src/index.ts"
+      ],
+      "@hub/lib/*": [
+        "packages/lib/src/*"
+      ],
+      "@hub/lib": [
+        "packages/lib/src/index.ts"
+      ],
+      "@hub/config/*": [
+        "packages/config/*"
+      ]
+    }
+  }
+}
