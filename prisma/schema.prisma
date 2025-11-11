@@ -21,6 +21,10 @@ model Tenant {
   resources   Resource[]
   subscriptions Subscription[]
   auditLogs   AuditLog[]
+guardians         Guardian[]
+  emailTemplates    EmailTemplate[]
+  messages          Message[]
+  commentBankItems  CommentBankItem[]
 }
 
 model User {
