@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "web": {
+      "rootDirectory": "apps/web",
+      "framework": "nextjs",
+      "installCommand": "npm install",
+      "buildCommand": "npm run build:web",
+      "env": {
+        "NEXT_PUBLIC_API_URL": "https://classroomhub.onrender.com"
+      }
+    }
+  }
+}

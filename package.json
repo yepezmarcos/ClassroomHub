@@ -20,7 +20,10 @@
     "api:dev": "npm --prefix apps/api run start:dev",
     "api:build": "npm --prefix apps/api run build",
     "api:seed": "ts-node --esm prisma/seed.ts",
-    "web:dev": "npm --prefix apps/web run dev"
+    "web:dev": "npm --prefix apps/web run dev",
+    "clean": "rimraf node_modules **/node_modules **/.next **/dist",
+    "build:packages": "turbo run build --filter=...[packages]",
+    "build:web": "turbo run build --filter=@hub/web"
   },
   "devDependencies": {
     "@nestjs/schematics": "10.2.3",
