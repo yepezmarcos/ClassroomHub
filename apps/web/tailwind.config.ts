@@ -1,3 +1,15 @@
-import type { Config } from 'tailwindcss'
-import preset from '@hub/config/tailwind.preset.cjs'
-export default { content: ['./app/**/*.{ts,tsx}', '../../packages/ui/src/**/*.{ts,tsx}'], presets:[preset] } satisfies Config
+import type { Config } from "tailwindcss";
+import baseConfig from "@hub/config/tailwind.preset.cjs";
+
+const config: Config = {
+  presets: [baseConfig],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "../../packages/ui/src/**/*.{ts,tsx}"
+  ],
+  theme: {},
+  plugins: []
+};
+
+export default config;
