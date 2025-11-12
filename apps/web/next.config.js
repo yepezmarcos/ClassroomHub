@@ -1,5 +1,6 @@
-import path from "path";
+const path = require("path");
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
     const projectRoot = process.cwd();
@@ -9,4 +10,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
