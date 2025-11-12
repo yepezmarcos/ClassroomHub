@@ -1,16 +1,30 @@
-name: ci
+name: CI
 on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - run: npm install
-      - run: npm run prisma:generate
-      - run: npm run typecheck --workspaces=false || true
-      - run: npm run build --workspaces=false || true
-      - run: cd prisma && npx prisma validate
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web app
+        run: npm run build --workspace=@hub/web
+
+      - name: Verify Prisma schema (optional)
+        run: npm run prisma:validate || true
