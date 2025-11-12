@@ -9,7 +9,7 @@
   "scripts": {
     "i": "npm install",
     "dev": "turbo run dev",
-    "build": "turbo run build",
+    "build": "turbo run build --filter=...[packages] && npm run build:web",
     "lint": "turbo run lint",
     "start": "npm run start --workspace=@hub/api",
     "typecheck": "turbo run typecheck",
@@ -23,7 +23,7 @@
     "web:dev": "npm --prefix apps/web run dev",
     "clean": "rimraf node_modules **/node_modules **/.next **/dist",
     "build:packages": "turbo run build --filter=...[packages]",
-    "build:web": "turbo run build --filter=@hub/web"
+    "build:web": "npm run build --workspace=@hub/web"
   },
   "devDependencies": {
     "@nestjs/schematics": "10.2.3",
